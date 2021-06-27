@@ -7,27 +7,32 @@ import { styles } from './url_failover_field_styles';
 
 const useStyles = createUseStyles(styles);
 
-export const URLFailoverField = ({ onChange, value: inputValue }) => {
-    const classes = useStyles();
+interface uRLFailoverFieldProps {
+	onChange: (url: any) => void;
+	value?: string;
+}
 
-    const [input, setInput] = useState(null);
+export const URLFailoverField: React.FC<uRLFailoverFieldProps> = ({ onChange, value: inputValue = '' }) => {
+	const classes = useStyles();
 
-    useEffect(() => setInput(inputValue), [inputValue]);
+	const [input, setInput] = useState('');
 
-    const handleChange = useCallback(
-        (e) => {
-            setInput(e.target.value);
-            onChange({ url: e.target.value });
-        },
-        [input]
-    );
+	useEffect(() => setInput(inputValue), [inputValue]);
 
-    return (
-        <div className={classes.container}>
-            <Typography component="div" className={classes.title}>
-                <FormattedMessage id="URLFailover.title" defaultMessage="Enter an URL" />
-            </Typography>
-            <TextField fullWidth variant="flat" placeholder="URL" onChange={handleChange} name="name" value={input} />
-        </div>
-    );
+	const handleChange = useCallback(
+		(e) => {
+			setInput(e.target.value);
+			onChange({ url: e.target.value });
+		},
+		[onChange]
+	);
+
+	return (
+		<div className={classes.container}>
+			<Typography component="div" className={classes.title}>
+				<FormattedMessage id="URLFailover.title" defaultMessage="Enter an URL" />
+			</Typography>
+			<TextField fullWidth variant="flat" placeholder="URL" onChange={handleChange} name="name" value={input} />
+		</div>
+	);
 };

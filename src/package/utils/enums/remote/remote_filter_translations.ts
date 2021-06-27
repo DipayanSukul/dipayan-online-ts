@@ -23,7 +23,7 @@ export const remoteSelectTranslations = defineMessages({
     }
 });
 
-export const remoteDisplayTranslations = defineMessages({
+export const remoteDisplayTranslations: any = defineMessages({
     never: {
         id: 'Developer.RemoteFrequency.Display.never',
         defaultMessage: "I'm not interested by remote work"

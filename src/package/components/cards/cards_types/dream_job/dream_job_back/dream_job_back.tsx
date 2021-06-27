@@ -1,5 +1,6 @@
 import React, { memo, useMemo, useRef } from 'react';
 
+import { Classes } from 'jss';
 import { createUseStyles } from 'react-jss';
 import { FormattedMessage, useIntl } from 'react-intl';
 
@@ -20,149 +21,175 @@ import { existsAndNotEmpty } from '../../../utils/exists_and_not_empty';
 import { REMOTE_FREQUENCY } from '../../../../../utils/enums/remote/remote_utils';
 import { remoteDisplayTranslations } from '../../../../../utils/enums/remote/remote_filter_translations';
 
-import { styles } from './dream_job_back_styles';
+import { CustomTheme, IProps, RuleNames, styles } from './dream_job_back_styles';
 import { hasOnlyFreelanceContract } from '../../../utils/has_only_freelance_contract';
+import { CONTRACT_TYPES } from '../../../../../utils/enums/contract_types/contract_types';
+import { JobIssues } from '../../../../../utils/enums/job_issues/job_issues_utils';
+import { JobPerks } from '../../../../../utils/enums/job_perks/job_perks_utils';
 
-const useStyles = createUseStyles(styles);
+const useStyles = createUseStyles<RuleNames, IProps, CustomTheme>(styles);
 
-const DreamJobBackComponent = ({ data }) => {
-    const classes = useStyles();
-    const { averageDailyRate, places, perks, salary, remoteFrequency, contractTypes, currentJobIssues } = data;
-    const isFreelance = hasOnlyFreelanceContract(contractTypes);
+interface dreamJobLocationProps extends dreamJobPlacesProps {
+	remoteFrequency: string;
+}
 
-    return (
-        <ProfileCardAnimatedBack title={<FormattedMessage id="Dreamjob.Back.Title" defaultMessage="Dream job" />}>
-            {existsAndNotEmpty(places) && (
-                <ProfileCardSection>
-                    <DreamJobLocations places={places} remoteFrequency={remoteFrequency} classes={classes} />
-                </ProfileCardSection>
-            )}
-            {existsAndNotEmpty(isFreelance ? averageDailyRate : salary) &&
-                (isFreelance ? averageDailyRate !== '0' : salary !== '0') && (
-                    <ProfileCardSection>
-                        <DreamJobSalarySectionContent
-                            contractTypes={contractTypes}
-                            averageDailyRate={averageDailyRate}
-                            salary={salary}
-                        />
-                    </ProfileCardSection>
-                )}
-            {existsAndNotEmpty(contractTypes) && (
-                <ProfileCardSection>
-                    <ProfileCardSectionTitle>
-                        <FormattedMessage id="Dreamjob.Back.ContractTypes.Title" defaultMessage="Contract types" />
-                    </ProfileCardSectionTitle>
-                    <ProfileCardSectionText>
-                        <ContractType contractTypes={contractTypes} />
-                    </ProfileCardSectionText>
-                </ProfileCardSection>
-            )}
-            {existsAndNotEmpty(perks) &&
-                typeof perks === 'object' &&
-                Object.values(perks).some((value) => existsAndNotEmpty(value)) && (
-                    <ProfileCardSection>
-                        <ProfileCardSectionTitle>
-                            <FormattedMessage
-                                id="Dreamjob.Back.Location.Perks.Title"
-                                defaultMessage="Important perks in my job"
-                            />
-                        </ProfileCardSectionTitle>
-                        <ProfileCardSectionText>
-                            <DreamJobPerks perks={perks} />
-                        </ProfileCardSectionText>
-                    </ProfileCardSection>
-                )}
-            {existsAndNotEmpty(currentJobIssues) && (
-                <ProfileCardSection>
-                    <ProfileCardSectionTitle>
-                        <FormattedMessage
-                            id="Dreamjob.Back.Location.CurrentJobIssues.Title"
-                            defaultMessage="Current job's issues"
-                        />
-                    </ProfileCardSectionTitle>
-                    <ProfileCardSectionText component="div">
-                        <DreamJobCurrentJobIssues currentJobIssues={currentJobIssues} />
-                    </ProfileCardSectionText>
-                </ProfileCardSection>
-            )}
-        </ProfileCardAnimatedBack>
-    );
+interface dreamJobBackComponentProps {
+	averageDailyRate: string;
+	places: {
+		name: string;
+	}[];
+	perks: typeof JobPerks;
+	salary: string;
+	remoteFrequency: string;
+	contractTypes: typeof CONTRACT_TYPES;
+	currentJobIssues: typeof JobIssues;
+}
+
+interface dreamJobPlacesProps {
+	places: {
+		name: string;
+	}[];
+	classes: Classes<RuleNames>;
+}
+
+const DreamJobBackComponent: React.FC<dreamJobBackComponentProps> = (data) => {
+	const classes = useStyles();
+	const { averageDailyRate, places, perks, salary, remoteFrequency, contractTypes, currentJobIssues } = data;
+	const isFreelance = hasOnlyFreelanceContract(contractTypes);
+
+	return (
+		<ProfileCardAnimatedBack title={<FormattedMessage id="Dreamjob.Back.Title" defaultMessage="Dream job" />}>
+			{existsAndNotEmpty(places) && (
+				<ProfileCardSection>
+					<DreamJobLocations places={places} remoteFrequency={remoteFrequency} classes={classes} />
+				</ProfileCardSection>
+			)}
+			{existsAndNotEmpty(isFreelance ? averageDailyRate : salary) &&
+				(isFreelance ? averageDailyRate !== '0' : salary !== '0') && (
+					<ProfileCardSection>
+						<DreamJobSalarySectionContent
+							contractTypes={contractTypes}
+							averageDailyRate={averageDailyRate}
+							salary={salary}
+						/>
+					</ProfileCardSection>
+				)}
+			{existsAndNotEmpty(contractTypes) && (
+				<ProfileCardSection>
+					<ProfileCardSectionTitle>
+						<FormattedMessage id="Dreamjob.Back.ContractTypes.Title" defaultMessage="Contract types" />
+					</ProfileCardSectionTitle>
+					<ProfileCardSectionText>
+						<ContractType contractTypes={contractTypes} />
+					</ProfileCardSectionText>
+				</ProfileCardSection>
+			)}
+			{existsAndNotEmpty(perks) &&
+				typeof perks === 'object' &&
+				Object.values(perks).some((value) => existsAndNotEmpty(value)) && (
+					<ProfileCardSection>
+						<ProfileCardSectionTitle>
+							<FormattedMessage
+								id="Dreamjob.Back.Location.Perks.Title"
+								defaultMessage="Important perks in my job"
+							/>
+						</ProfileCardSectionTitle>
+						<ProfileCardSectionText>
+							<DreamJobPerks perks={perks} />
+						</ProfileCardSectionText>
+					</ProfileCardSection>
+				)}
+			{existsAndNotEmpty(currentJobIssues) && (
+				<ProfileCardSection>
+					<ProfileCardSectionTitle>
+						<FormattedMessage
+							id="Dreamjob.Back.Location.CurrentJobIssues.Title"
+							defaultMessage="Current job's issues"
+						/>
+					</ProfileCardSectionTitle>
+					<ProfileCardSectionText component="div">
+						<DreamJobCurrentJobIssues currentJobIssues={currentJobIssues} />
+					</ProfileCardSectionText>
+				</ProfileCardSection>
+			)}
+		</ProfileCardAnimatedBack>
+	);
 };
 
-const DreamJobLocations = ({ remoteFrequency, places, classes }) => {
-    const { formatMessage } = useIntl();
-    if (remoteFrequency === REMOTE_FREQUENCY.FULL_TIME) {
-        return <FormattedMessage id="Dreamjob.Back.Location.RemoteOnly" defaultMessage="I want to work remotely" />;
-    }
+const DreamJobLocations = ({ remoteFrequency, places, classes }: dreamJobLocationProps) => {
+	const { formatMessage } = useIntl();
+	if (remoteFrequency === REMOTE_FREQUENCY.FULL_TIME) {
+		return <FormattedMessage id="Dreamjob.Back.Location.RemoteOnly" defaultMessage="I want to work remotely" />;
+	}
 
-    return (
-        <>
-            <ProfileCardSectionTitle>
-                <FormattedMessage id="Dreamjob.Back.Location.Title" defaultMessage="My dreamjob location" />
-            </ProfileCardSectionTitle>
-            <ProfileCardSectionText>
-                <DreamJobPlaces places={places} classes={classes} />
-                <br />
-                {remoteFrequency &&
-                    formatMessage(remoteDisplayTranslations[remoteFrequency] || remoteDisplayTranslations.others)}
-            </ProfileCardSectionText>
-        </>
-    );
+	return (
+		<>
+			<ProfileCardSectionTitle>
+				<FormattedMessage id="Dreamjob.Back.Location.Title" defaultMessage="My dreamjob location" />
+			</ProfileCardSectionTitle>
+			<ProfileCardSectionText>
+				<DreamJobPlaces places={places} classes={classes} />
+				<br />
+				{remoteFrequency &&
+					formatMessage(remoteDisplayTranslations[remoteFrequency] || remoteDisplayTranslations.others)}
+			</ProfileCardSectionText>
+		</>
+	);
 };
 
-const DreamJobPlaces = ({ places = [], classes }) => {
-    const textAnchor = useRef();
-    const [open, handlers] = useOpenerState();
-    const { firstPlace, remainingPlaces } = useMemo(() => {
-        const placesCopy = [...places];
-        const item = placesCopy.shift();
-        return { firstPlace: item, remainingPlaces: placesCopy };
-    }, [places]);
+const DreamJobPlaces = ({ places = [], classes }: dreamJobPlacesProps) => {
+	const textAnchor = useRef();
+	const [open, handlers] = useOpenerState();
+	const { firstPlace, remainingPlaces } = useMemo(() => {
+		const placesCopy = [...places];
+		const item = placesCopy.shift();
+		return { firstPlace: item, remainingPlaces: placesCopy };
+	}, [places]);
 
-    if (!remainingPlaces.length) {
-        return (
-            <ProfileCardSectionText>
-                <FormattedMessage
-                    id="Dreamjob.Back.Location.OnePlace"
-                    defaultMessage="I want to work in {place}"
-                    values={{ place: firstPlace?.name ?? '' }}
-                />
-            </ProfileCardSectionText>
-        );
-    }
+	if (!remainingPlaces.length) {
+		return (
+			<ProfileCardSectionText>
+				<FormattedMessage
+					id="Dreamjob.Back.Location.OnePlace"
+					defaultMessage="I want to work in {place}"
+					values={{ place: firstPlace?.name ?? '' }}
+				/>
+			</ProfileCardSectionText>
+		);
+	}
 
-    return (
-        <>
-            <button className={classes.button} type="button" ref={textAnchor} {...handlers}>
-                <FormattedMessage
-                    id="Dreamjob.Back.Location.ManyPlaces"
-                    defaultMessage="I want to work in {place} and {length, plural, one {one other place} other {# other places}}"
-                    values={{ place: firstPlace.name, length: remainingPlaces.length }}
-                />
-            </button>
-            <PopperCard
-                open={open}
-                anchorElement={textAnchor.current}
-                popperProps={{
-                    modifiers: {
-                        preventOverflow: {
-                            boundariesElement: 'viewport'
-                        }
-                    }
-                }}
-            >
-                <List>
-                    {remainingPlaces
-                        .filter((item) => item)
-                        .map(({ name }, index) => (
-                            <ListItem key={`place_popper_${index}`}>
-                                <Typography>{name}</Typography>
-                            </ListItem>
-                        ))}
-                </List>
-            </PopperCard>
-        </>
-    );
+	return (
+		<>
+			<button className={classes.button} type="button" ref={textAnchor} {...handlers}>
+				<FormattedMessage
+					id="Dreamjob.Back.Location.ManyPlaces"
+					defaultMessage="I want to work in {place} and {length, plural, one {one other place} other {# other places}}"
+					values={{ place: firstPlace?.name, length: remainingPlaces.length }}
+				/>
+			</button>
+			<PopperCard
+				open={open}
+				anchorElement={textAnchor.current}
+				popperProps={{
+					modifiers: {
+						preventOverflow: {
+							boundariesElement: 'viewport'
+						}
+					}
+				}}
+			>
+				<List>
+					{remainingPlaces
+						.filter((item) => item)
+						.map(({ name }, index) => (
+							<ListItem key={`place_popper_${index}`}>
+								<Typography>{name}</Typography>
+							</ListItem>
+						))}
+				</List>
+			</PopperCard>
+		</>
+	);
 };
 
 export const DreamJobBack = memo(DreamJobBackComponent);
