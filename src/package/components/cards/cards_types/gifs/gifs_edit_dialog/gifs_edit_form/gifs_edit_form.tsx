@@ -18,7 +18,7 @@ import { GifsSortableCards } from './gifs_sortable_cards/gifs_sortable_cards';
 
 import { styles } from './gifs_edit_form_styles';
 import { StaticDataContext } from '../../../../../../utils/context/contexts';
-import { URLFallbackDialog } from '../../../../../commons/url_fallback_dialog.jsx/url_fallback_dialog';
+import { URLFallbackDialog } from '../../../../../commons/url_fallback_dialog/url_fallback_dialog';
 
 const useStyles = createUseStyles(styles);
 

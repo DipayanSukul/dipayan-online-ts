@@ -17,13 +17,13 @@ const jssinstance = create(jssDefaultPreset());
 jssinstance.setup({ insertionPoint: 'jss-insertion-point' });
 
 export const theme = createMuiTheme({
-    ...DEFAULT_THEME,
-    spacing: 8,
-    palette: Object.entries(DEFAULT_THEME.palette).reduce((acc, [name, values]) => {
-        const accCopy = acc;
-        accCopy[name].main = values[500];
-        return accCopy;
-    }, DEFAULT_THEME.palette)
+	...DEFAULT_THEME,
+	spacing: 8,
+	palette: Object.entries(DEFAULT_THEME.palette).reduce((acc, [name, values]) => {
+		const accCopy = acc;
+		accCopy[name].main = values[500];
+		return accCopy;
+	}, DEFAULT_THEME.palette)
 });
 
 const jssStyleNode = document.createComment('insertion-point-jss');
@@ -32,12 +32,12 @@ document.head.insertBefore(jssStyleNode, document.head.firstChild);
 document.head.insertBefore(muiStyleNode, document.head.firstChild);
 
 ReactDOM.render(
-    <MuiStylesProvider jss={muiInstance}>
-        <JssProvider jss={jssinstance}>
-            <ThemeProvider {...{ theme }}>
-                <App />
-            </ThemeProvider>
-        </JssProvider>
-    </MuiStylesProvider>,
-    document.getElementById('root')
+	<MuiStylesProvider jss={muiInstance}>
+		<JssProvider jss={jssinstance}>
+			<ThemeProvider {...{ theme }}>
+				<App />
+			</ThemeProvider>
+		</JssProvider>
+	</MuiStylesProvider>,
+	document.getElementById('root')
 );
