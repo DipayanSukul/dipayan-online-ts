@@ -1,43 +1,142 @@
 {
-  "name": "dipayan-online-ts",
-  "version": "0.1.0",
-  "private": true,
-  "dependencies": {
-    "@testing-library/jest-dom": "^5.14.1",
-    "@testing-library/react": "^11.2.7",
-    "@testing-library/user-event": "^12.8.3",
-    "@types/jest": "^26.0.23",
-    "@types/node": "^12.20.15",
-    "@types/react": "^17.0.11",
-    "@types/react-dom": "^17.0.8",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "react-scripts": "4.0.3",
-    "typescript": "^4.3.4",
-    "web-vitals": "^1.1.2"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  }
+	"name": "dipayan-online-ts",
+	"version": "0.1.0",
+	"private": true,
+	"scripts": {
+		"start": "touch .env.local && sh -ac 'sh .env.${NODE_ENV:-local}; PORT=${PORT:-3000} EXTEND_ESLINT=true BROWSER=none react-scripts start'",
+		"dev": "npm start",
+		"eject": "react-scripts eject",
+		"test": "react-scripts test",
+		"prepackage": "rimraf lib ",
+		"package": "\"node_modules/.bin/babel\" --extensions '.ts,.tsx,.js,.jsx' src/package -d .",
+		"postpackage": "cp-cli src/package/i18n i18n && cp-cli src/package/assets assets",
+		"test-build": "rimraf \"test-build\" && \"node_modules/.bin/babel\" --extensions '.ts,.tsx,.js,.jsx' src -d \"test_build\"",
+		"posttest-build": "rimraf \"test_build\" \"styles\" ",
+		"build": "react-scripts build",
+		"build:messages": "NODE_ENV=production babel ./src >/dev/null",
+		"serve": "react-scripts build && serve build",
+		"manage:translations": "node \"translationRunner.js\"",
+		"gh-deploy": "npm run build && gh-pages -d build",
+		"version:beta": "npm version prerelease --preid=beta",
+		"version:release": "npm version ${VERSION:-patch}",
+		"dev:local": "lite-server"
+	},
+	"peerDependencies": {
+		"@material-ui/core": "4.11.4",
+		"@welovedevs/ui": "1.2.7",
+		"formik": "2.2.9",
+		"react": "17.0.2",
+		"react-dom": "17.0.2"
+	},
+	"dependencies": {
+		"@testing-library/user-event": "^12.8.3",
+		"@types/jest": "^26.0.23",
+		"@types/node": "^12.20.15",
+		"@types/react": "^17.0.11",
+		"@types/react-dom": "^17.0.8",
+		"react": "^17.0.2",
+		"react-dom": "^17.0.2",
+		"react-scripts": "4.0.3",
+		"web-vitals": "^1.1.2",
+		"@date-io/moment": "2.10.11",
+		"@formatjs/intl-pluralrules": "4.0.28",
+		"@formatjs/intl-relativetimeformat": "9.1.7",
+		"@material-ui/pickers": "3.3.10",
+		"@welovedevs/ui": "1.2.7",
+		"chroma-js": "2.1.2",
+		"classnames": "2.3.1",
+		"copy-to-clipboard": "3.3.1",
+		"cp-cli": "2.0.0",
+		"downloadjs": "1.4.7",
+		"formik": "2.2.9",
+		"framer-motion": "4.1.17",
+		"jss-preset-default": "10.6.0",
+		"lodash": "4.17.21",
+		"moment": "2.29.1",
+		"prop-types": "15.7.2",
+		"react-dropzone": "11.3.4",
+		"react-emoji-render": "1.2.4",
+		"react-images": "1.2.0-beta.7",
+		"react-infinite-scroller": "1.2.4",
+		"react-intl": "5.20.4",
+		"react-jss": "10.6.0",
+		"react-slick": "0.28.1",
+		"react-sortable-hoc": "2.0.0",
+		"react-use-dimensions": "1.2.1",
+		"recharts": "2.0.9",
+		"respinner": "3.0.4",
+		"use-debounce": "7.0.0",
+		"uuid": "8.3.2",
+		"values.js": "2.0.0",
+		"whatwg-fetch": "3.6.2",
+		"yup": "0.32.9"
+	},
+	"devDependencies": {
+		"@babel/cli": "7.14.5",
+		"@babel/core": "7.14.6",
+		"@babel/eslint-plugin": "7.14.5",
+		"@babel/plugin-proposal-optional-chaining": "7.14.5",
+		"@babel/plugin-transform-runtime": "7.14.5",
+		"@babel/preset-env": "7.14.7",
+		"@babel/preset-react": "7.14.5",
+		"@babel/preset-typescript": "7.14.5",
+		"@testing-library/jest-dom": "5.14.1",
+		"@testing-library/react": "11.2.7",
+		"babel-plugin-css-modules-transform": "1.6.2",
+		"babel-plugin-inline-react-svg": "2.0.1",
+		"babel-plugin-react-intl": "8.2.25",
+		"babel-plugin-transform-import-styles": "0.0.11",
+		"eslint-config-airbnb": "18.2.1",
+		"eslint-plugin-import": "2.23.4",
+		"eslint-plugin-jsx-a11y": "6.4.1",
+		"eslint-plugin-react": "7.24.0",
+		"eslint-plugin-react-hooks": "4.2.0",
+		"gh-pages": "3.2.3",
+		"husky": "6.0.0",
+		"lint-staged": "11.0.0",
+		"ora": "5.4.1",
+		"prettier": "2.3.2",
+		"react-intl-translations-manager": "5.0.3",
+		"readline-sync": "1.4.10",
+		"rimraf": "3.0.2",
+		"serve": "12.0.0",
+		"lite-server": "2.6.1",
+		"typescript": "^4.3.4"
+	},
+	"resolutions": {
+		"react-jss": "10.6.0",
+		"react": "^17.0.2",
+		"react-dom": "^17.0.2",
+		"@material-ui/core": "4.11.4"
+	},
+	"eslintConfig": {
+		"extends": [
+			"react-app"
+		]
+	},
+	"browserslist": {
+		"production": [
+			">0.2%",
+			"not dead",
+			"not op_mini all"
+		],
+		"development": [
+			"last 1 chrome version",
+			"last 1 firefox version",
+			"last 1 safari version"
+		]
+	},
+	"husky": {
+		"hooks": {
+			"pre-commit": "npm run test-build --scripts-prepend-node-path && lint-staged"
+		}
+	},
+	"lint-staged": {
+		"src/**/*.{js,jsx,ts,tsx,json,css,scss,md}": [
+			"prettier --write"
+		],
+		"*.+(ts|tsx)": [
+			"prettier --loglevel=debug --write"
+		]
+	}
 }
